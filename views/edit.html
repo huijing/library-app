@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<main>
+  <form method="post" action="/book/{{book._id}}?_method=PUT">
+    <h2>{{ book._id }}</h2>
+    <label>
+      <p>Book title</p>
+      <input type="text" placeholder="Title" name="title" value="{{ book.title }}">
+    </label>
+    <label>
+      <p>Dewey decimal</p>
+      <input type="text" placeholder="Dewey decimal" name="dewey_decimal" value="{{ book.dewey_decimal }}">
+    </label>
+    <label>
+      <p>Available at</p>
+      <select name="available_at[]" multiple>
+        {% for library in libraries %}
+          {% if book.available_at == library.name %}
+            <option selected>{{ library.name }}</option>
+          {% else %}
+            <option>{{ library.name }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </label>
+    <fieldset>
+      <legend>Borrowed?</legend>
+      {% if book.borrowed == "yes" %}
+        {{ checked }}
+        {% set checked = "checked" %}
+      {% else %}
+        {{ notchecked }}
+        {% set notchecked = "checked" %}
+      {% endif %}
+      <label>
+        <span>Yes</span>
+        <input type="radio" name="borrowed" value="yes" {{ checked }}>
+      </label>
+      <label>
+        <span>No</span>
+        <input type="radio" name="borrowed" value="no" {{ notchecked }}>
+      </label>
+    </fieldset>
+    <button>Submit</button>
+  </form>
+
+  <form method="post" action="/book/{{book._id}}?_method=DELETE">
+    <button>Delete</button>
+  </form>
+</main>
+{% endblock %}

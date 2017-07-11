@@ -1,0 +1,70 @@
+{% extends "layout.html" %} 
+
+{% block main %}
+<main>
+  <h2>Add a book</h2>
+  <form class="l-entry" action="/books" method="POST">
+    <label>
+      <p>Book title</p>
+      <input type="text" name="title">
+    </label>
+    <label>
+      <p>Dewey decimal</p>
+      <input type="text" name="dewey_decimal">
+    </label>
+    <label>
+      <p>Available at</p>
+      <select name="available_at[]" multiple>
+        {% for library in libraries %}
+        <option>{{ library.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <fieldset>
+      <legend>Borrowed?</legend>
+      <label>
+        <input type="radio" name="borrowed" value="yes">
+        <span>Yes</span>
+      </label>
+      <label>
+        <input type="radio" name="borrowed" value="no">
+        <span>No</span>
+      </label>
+    </fieldset>
+    <button>Submit</button>
+  </form>
+  <table id="jsBooks">
+    <thead>
+      <tr>
+        <th></th>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Dewey decimal</th>
+        <th>Available at</th>
+        <th>Borrowed?</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+      <tr id="{{ book._id }}">
+        <td class="tb-edit">
+          <a href="book/{{ book._id }}" data-function="edit">Edit</a>
+        </td>
+        <td class="tb-id">{{ loop.index }}</td>
+        <td class="tb-title">{{ book.title }}</td>
+        <td class="tb-dewey">{{ book.dewey_decimal }}</td>
+        <td class="tb-available">
+          <ul>
+            {% for library in book.available_at %}
+            <li>{{ library }}</li>
+            {% endfor %}
+          </ul>
+        </td>
+        <td class="tb-borrowed">{{ book.borrowed }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</main>
+<script src="js/scripts.js"></script>
+{% endblock %}

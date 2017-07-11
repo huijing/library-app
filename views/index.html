@@ -1,0 +1,44 @@
+{% extends "layout.html" %} 
+
+{% block main %}
+<main>
+  <select class="l-filter" id="jsFilter" data-table="js-table">
+    <option selected disabled>Select a library</option>
+    {% for library in libraries %}
+    <option>{{ library.name }}</option>
+    {% endfor %}
+  </select>
+  <input type="checkbox" id="hideLibrary" class="l-toggle">
+  <label for="hideLibrary" class="l-toggle">Hide library list</label>
+  <a href="/modify">Modify</a>
+  <table class="js-table" id="jsListing">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>DDS</th>
+        <th>Available at</th>
+        <th>Borrowed?</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+      <tr>
+        <td class="tb-id">{{ loop.index }}</td>
+        <td class="tb-title">{{ book.title }}</td>
+        <td class="tb-dewey">{{ book.dewey_decimal }}</td>
+        <td class="tb-available">
+          <ul>
+            {% for library in book.available_at %}
+            <li>{{ library }}</li>
+            {% endfor %}
+          </ul>
+        </td>
+        <td class="tb-borrowed">{{ book.borrowed }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</main>
+<script src="js/scripts.js"></script>
+{% endblock %}
