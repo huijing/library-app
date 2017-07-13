@@ -31,14 +31,14 @@ First pass functionality was very simple, CRUD functionality for each book entry
 
 Ability to filter books based on library location and function to show/hide library information per book.
 
-## Phase 3: Make it work offline
+## :white_check_mark: Phase 3: Make it work offline
 
 List of books should be available regardless of connectivity. Adding/editing of books is a secondary functionality.
 
-## Phase 4: Add authentication
+## :white_check_mark: Phase 4: Add authentication
 
 We can't have bots and bored humans spamming my list. It's a personal utility app, not a let's-all-go-to-town-on-this app. 
 
 ## Phase 5: Make it look prettier
 
-WIP.
+I lazy. WIP. Eventually.
