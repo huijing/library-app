@@ -12,7 +12,7 @@ var uglify      = require('gulp-uglify');
  */
 gulp.task('browser-sync', ['sass', 'scripts'], function() {
   browserSync.init(null, {
-    proxy: 'localhost:1845',
+    proxy: 'localhost:5000',
     port: 3000,
   });
 });

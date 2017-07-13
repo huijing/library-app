@@ -13,7 +13,7 @@ const username = process.env.ADMIN_USER
 const password = process.env.ADMIN_PASSWORD
 
 const basic = auth.basic({ realm: 'Modify database' }, (username, password, callback) => {
-    callback(username == username && password == password)
+  callback(username == username && password == password)
 })
 
 const app = express()
