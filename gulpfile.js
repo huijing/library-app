@@ -49,7 +49,7 @@ gulp.task('sass-prod', function () {
 gulp.task('scripts', function() {
   return gulp.src(['_js/scripts.js'])
   .pipe(babel({
-    presets: ['es2015']
+    presets: ['env']
   }))
   .pipe(concat('scripts.js'))
   .pipe(gulp.dest('public/js'))
@@ -59,7 +59,7 @@ gulp.task('scripts', function() {
 gulp.task('scripts-prod', function() {
   return gulp.src(['_js/scripts.js'])
   .pipe(babel({
-    presets: ['es2015']
+    presets: ['env']
   }))
   .pipe(concat('scripts.js'))
   .pipe(uglify())
