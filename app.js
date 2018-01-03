@@ -56,7 +56,7 @@ let db
 
 MongoClient.connect(dbConfig, (err, database) => {
   if (err) return console.log(err)
-  db = database
+  db = database.db('library')
   app.listen(process.env.PORT || 1845, function() {
     console.log('listening on ' + process.env.PORT)
   })
