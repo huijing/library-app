@@ -1,1 +1,52 @@
-"use strict";"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("service-worker.js").then(function(e){console.log("ServiceWorker registration successful with scope: ",e.scope)},function(e){console.log("ServiceWorker registration failed: ",e)})}),function(e){var t=function(t){var n=void 0;function o(o){n=o.target;var i=e.getElementsByClassName(n.getAttribute("data-table"));t.forEach.call(i,function(e){t.forEach.call(e.tBodies,function(e){t.forEach.call(e.rows,r)})})}function r(e){var t=e.textContent.toLowerCase(),o=n.value.toLowerCase();e.style.display=-1===t.indexOf(o)?"none":"table-row"}return{init:function(){e.getElementById("jsFilter").onchange=o}}}(Array.prototype);e.addEventListener("readystatechange",function(){if("complete"===e.readyState){var n=e.getElementById("jsListing");e.getElementById("jsBooks");n&&t.init()}})}(document);
+"use strict";
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('service-worker.js').then(function (registration) {
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }, function (err) {
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  });
+}
+
+(function (document) {
+  var tableFilter = function (array) {
+    var _input;
+
+    function selectLibrary(event) {
+      _input = event.target;
+      var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
+      array.forEach.call(tables, function (table) {
+        array.forEach.call(table.tBodies, function (tbody) {
+          array.forEach.call(tbody.rows, _filter);
+        });
+      });
+    }
+
+    function _filter(row) {
+      var text = row.textContent.toLowerCase(),
+          val = _input.value.toLowerCase();
+
+      row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
+    }
+
+    return {
+      init: function init() {
+        var selection = document.getElementById('jsFilter');
+        selection.onchange = selectLibrary;
+      }
+    };
+  }(Array.prototype);
+
+  document.addEventListener('readystatechange', function () {
+    if (document.readyState === 'complete') {
+      var jsListing = document.getElementById('jsListing');
+      var jsBooks = document.getElementById('jsBooks');
+
+      if (jsListing) {
+        tableFilter.init();
+      }
+    }
+  });
+})(document);
