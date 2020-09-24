@@ -8,48 +8,50 @@ const MongoClient = require('mongodb').MongoClient
 const ObjectId = require('mongodb').ObjectID
 const methodOverride = require('method-override')
 const auth = require('http-auth')
+const authConnect = require('http-auth-connect')
 const dbConfig = process.env.MONGO_URI
 const username = process.env.ADMIN_USER
 const password = process.env.ADMIN_PASSWORD
 
-const basic = auth.basic({ realm: 'Modify database' }, (username, password, callback) => {
+const basic = auth.basic({
+  realm: 'You needz password to modify database'
+}, (username, password, callback) => {
   callback(username == username && password == password)
 })
 
 const app = express()
-
-const authMiddleware = auth.connect(basic)
+app.use(authConnect(basic))
 
 const libraries = [
-  { name: "Ang Mo Kio Public Library" },
-  { name: "Bedok Public Library" },
-  { name: "Bishan Public Library" },
-  { name: "Bukit Batok Public Library" },
-  { name: "Bukit Merah Public Library" },
-  { name: "Bukit Panjang Public Library" },
-  { name: "Central Public Library" },
-  { name: "Cheng San Public Library" },
-  { name: "Choa Chu Kang Public Library" },
-  { name: "Clementi Public Library" },
-  { name: "Geylang East Public Library" },
-  { name: "Jurong Regional Library" },
-  { name: "Jurong West Public Library" },
-  { name: "library@chinatown" },
-  { name: "library@esplanade" },
-  { name: "library@orchard" },
-  { name: "Marine Parade Public Library" },
-  { name: "Lee Kong Chian Reference Library Lvl 7" },
-  { name: "Lee Kong Chian Reference Library Lvl 8" },
-  { name: "Lee Kong Chian Reference Library Lvl 9" },
-  { name: "Pasir Ris Public Library" },
-  { name: "Queenstown Public Library" },
-  { name: "Sembawang Public Library" },
-  { name: "Sengkang Public Library" },
-  { name: "Serangoon Public Library" },
-  { name: "Tampines Regional Library" },
-  { name: "Toa Payoh Public Library" },
-  { name: "Woodlands Regional Library" },
-  { name: "Yishun Public Library" }
+  { name: 'Ang Mo Kio Public Library' },
+  { name: 'Bedok Public Library' },
+  { name: 'Bishan Public Library' },
+  { name: 'Bukit Batok Public Library' },
+  { name: 'Bukit Merah Public Library' },
+  { name: 'Bukit Panjang Public Library' },
+  { name: 'Central Public Library' },
+  { name: 'Cheng San Public Library' },
+  { name: 'Choa Chu Kang Public Library' },
+  { name: 'Clementi Public Library' },
+  { name: 'Geylang East Public Library' },
+  { name: 'Jurong Regional Library' },
+  { name: 'Jurong West Public Library' },
+  { name: 'library@chinatown' },
+  { name: 'library@esplanade' },
+  { name: 'library@orchard' },
+  { name: 'Marine Parade Public Library' },
+  { name: 'Lee Kong Chian Reference Library Lvl 7' },
+  { name: 'Lee Kong Chian Reference Library Lvl 8' },
+  { name: 'Lee Kong Chian Reference Library Lvl 9' },
+  { name: 'Pasir Ris Public Library' },
+  { name: 'Queenstown Public Library' },
+  { name: 'Sembawang Public Library' },
+  { name: 'Sengkang Public Library' },
+  { name: 'Serangoon Public Library' },
+  { name: 'Tampines Regional Library' },
+  { name: 'Toa Payoh Public Library' },
+  { name: 'Woodlands Regional Library' },
+  { name: 'Yishun Public Library' }
 ]
 
 let db
@@ -83,7 +85,7 @@ app.get('/', (req, res) => {
   })
 })
 
-app.get('/modify', authMiddleware, (req, res) => {
+app.get('/modify', (req, res) => {
   db.collection('books').find().toArray((err, result) => {
     if (err) return console.log(err)
     res.render('modify', {
@@ -94,7 +96,7 @@ app.get('/modify', authMiddleware, (req, res) => {
 })
 
 app.post('/books', (req, res) => {
-  db.collection('books').save(req.body, (err, result) => {
+  db.collection('books').save(req.body, (err) => {
     if (err) return console.log(err)
     console.log('saved to database')
     res.redirect('/modify')
@@ -102,7 +104,7 @@ app.post('/books', (req, res) => {
 })
 
 app.get('/book/:id', (req, res) => {
-  const query = {"_id": ObjectId(req.params.id)}
+  const query = {'_id': ObjectId(req.params.id)}
   db.collection('books').findOne(query, function(err, book) {
     console.log(book)
     if (err) return console.log(err)
@@ -114,7 +116,7 @@ app.get('/book/:id', (req, res) => {
 })
 
 app.put('/book/:id', function(req, res) {
-  const query = {"_id": ObjectId(req.params.id)}
+  const query = {'_id': ObjectId(req.params.id)}
   const update = {
     title: req.body.title,
     dewey_decimal: req.body.dewey_decimal,
@@ -122,7 +124,7 @@ app.put('/book/:id', function(req, res) {
     borrowed: req.body.borrowed
   }
   const options = { new: true }
-  db.collection('books').findOneAndUpdate(query, update, options, function(err, book) {
+  db.collection('books').findOneAndUpdate(query, update, options, function(err) {
     if (err) return console.log(err)
     console.log('entry updated')
     res.redirect('/modify')
@@ -130,7 +132,7 @@ app.put('/book/:id', function(req, res) {
 })
 
 app.delete('/book/:id', function(req, res) {
-  const query = {"_id": ObjectId(req.params.id)}
+  const query = {'_id': ObjectId(req.params.id)}
   db.collection('books').findOneAndDelete(query, function(err, book) {
     console.log(book)
     res.redirect('/modify')
