@@ -1,11 +1,14 @@
-const gulp        = require('gulp');
-const browserSync = require('browser-sync');
-const sass        = require('gulp-sass');
-const prefix      = require('gulp-autoprefixer');
-const cssnano     = require('gulp-cssnano');
-const concat      = require('gulp-concat');
-const uglify      = require('gulp-uglify');
-const babel       = require('gulp-babel');
+const gulp         = require('gulp');
+const browserSync  = require('browser-sync');
+const sass         = require('@selfisekai/gulp-sass');
+const postcss      = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+const cssnano      = require('cssnano');
+const concat       = require('gulp-concat');
+const uglify       = require('gulp-uglify');
+const babel        = require('gulp-babel');
+
+sass.compiler = require('sass');
 
 const startServer = (done) => {
   browserSync.init({
@@ -31,12 +34,16 @@ const compileScripts = () => {
 }
 
 const compileStyles = () => {
+  const plugins = [
+    autoprefixer(),
+    cssnano()
+  ]
   return gulp.src('_scss/styles.scss')
   .pipe(sass({
     includePaths: ['scss'],
     onError: browserSync.notify
   }))
-  .pipe(prefix(['last 15 versions', '> 1%', 'ie 8', 'ie 7'], { cascade: true }))
+  .pipe(postcss(plugins))
   .pipe(gulp.dest('public/css'))
   .pipe(browserSync.reload({ stream:true }))
 }
